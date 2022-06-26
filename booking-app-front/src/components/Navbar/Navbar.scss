@@ -1,0 +1,58 @@
+.navbar {
+  height: 50px;
+  background-color: #003580;
+  display: flex;
+  justify-content: center;
+
+  .navContainer {
+    width: 100%;
+    max-width: 1200px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .logo {
+      font-size: 1.4rem;
+      color: whitesmoke;
+      font-weight: 500;
+    }
+
+    .navButton {
+      margin-left: 20px;
+      background-color: rgb(69, 69, 69);
+      border: 1px solid transparent;
+      padding: 10px 15px;
+      color: white;
+      font-weight: 400;
+      border-radius: 20px;
+      transition: all 0.3s ease-in-out;
+      cursor: pointer;
+
+      &:nth-child(2n) {
+        background-color: rgb(242, 246, 245);
+        color: black;
+      }
+
+      &:nth-child(3) {
+        background-color: rgb(17, 115, 251);
+        color: black;
+      }
+
+      &:last-child {
+        background-color: rgb(210, 18, 18);
+        color: black;
+      }
+
+      &:hover {
+        background-color: #4678be;
+        border: 1px solid white;
+      }
+    }
+
+    .lngButton {
+      @extend .navButton;
+      background-color: rgb(69, 69, 69);
+    }
+  }
+}

@@ -1,0 +1,178 @@
+.header {
+  background-color: #003580;
+  color: white;
+  display: flex;
+  justify-content: center;
+  position: relative;
+
+  .headerContainer {
+    width: 100%;
+    max-width: 1200px;
+    margin: 20px 0px 50px 0px;
+
+    .headerList {
+      display: flex;
+      justify-content: space-between;
+      gap: 40px;
+
+      .headerListItem {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding: 10px;
+        font-size: 1.1rem;
+        transition: border-radius 0.2s ease-in-out;
+        cursor: pointer;
+        user-select: none;
+        
+
+        &:hover {
+          color: #ddabeb;
+        }
+
+        &.active {
+          outline: 1px solid white;
+          border-radius: 20px;
+
+          &:hover {
+            border-color: #ddabeb;
+          }
+        }
+      }
+    }
+    .headerTitle {
+      font-size: 2.5rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .headerDesc {
+      font-size: 1.2rem;
+      font-weight: 300;
+      margin-bottom: 15px;
+    }
+    .headerBtn {
+      background-color: #0452bf;
+      color: white;
+      font-weight: 500;
+      border: 1px solid transparent;
+      padding: 7px 15px;
+      line-height: 1.1;
+      border-radius: 20px;
+      transition: all 0.3s ease-in-out;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #0071c2;
+        border: 1px solid white;
+      }
+    }
+  }
+  .headerSearch {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    height: 50px;
+    background-color: white;
+    border: 3px solid #febb92;
+    padding: 10px 0px;
+    border-radius: 5px;
+    position: absolute;
+    bottom: -25px;
+    width: 100%;
+    max-width: 1200px;
+
+    .headerSearchItem {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      .headerSearchInput {
+        border: none;
+        outline: none;
+        font-size: 1.2rem;
+        font-weight: 400;
+        cursor: text;
+      }
+
+      .headerSearchText {
+        color: gray;
+        font-size: 1.1rem;
+        font-weight: 400;
+        cursor: pointer;
+      }
+      .headerSearchTextFirst {
+        @extend .headerSearchText;
+        width: 240px;
+      }
+      .options {
+        position: absolute;
+        top: 50px;
+        z-index: 99;
+        background-color: white;
+        color: gray;
+        border-radius: 5px;
+        -webkit-box-shadow: 0px 0px 6px 1px rgba(0, 0, 0, 0.75);
+        box-shadow: 0px 0x 10px -5px rgba(0, 9, 9, 0.4);
+
+        .optionItem {
+          width: 200px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin: 10px 10px;
+        }
+
+        .optionText {
+          color: black;
+        }
+        .optionCounter {
+          display: flex;
+          align-items: center;
+          justify-content: space-around;
+          gap: 10px;
+          font-size: 13px;
+          color: black;
+        }
+        .optionCounterButton {
+          width: 25px;
+          height: 25px;
+          border-radius: 50%;
+          border: 1px solid #0071c2;
+          color: #0071c2;
+          cursor: pointer;
+          &:disabled {
+            border: 1px solid gray;
+            color: gray;
+            cursor: not-allowed;
+          }
+        }
+        .optionCounterNumber {
+          width: 14px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+
+      .date-range {
+        position: absolute;
+        top: 48px;
+        left: 25%;
+        z-index: 99;
+        border: 1px solid black;
+        border-radius: 1px;
+        -webkit-box-shadow: 0px 0px 6px 1px rgba(0, 0, 0, 0.75);
+        box-shadow: 0px 0x 10px -5px rgba(0, 9, 9, 0.4);
+      }
+
+      .headerIcon {
+        font-size: 1.5rem;
+        color: #0452bf;
+        &.last {
+          font-size: 1.75rem;
+        }
+      }
+    }
+  }
+}

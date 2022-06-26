@@ -1,0 +1,41 @@
+.featured {
+  width: 100%;
+  max-width: 1200px;
+  margin-top: 15px;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+
+  .featuredItem {
+    position: relative;
+    color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    height: 250px;
+    border: 2px solid rgba(0, 0, 0, 0.8);
+    transition: transform 0.2s ease-in, all 0.3s ease-in;
+
+    &:hover {
+      transform: scale(1.03);
+      transition: transform 0.2s ease-in, all 0.3s ease-in;
+      border-color: rgba(111, 59, 52, 0.8);
+      border-width: 2px;
+    }
+    &:hover .featuredTitles {
+      transform: scale(1.08);
+      transition: transform 0.3s ease-in, all 0.3s ease-in;
+    }
+
+    .featuredImg {
+      width: 100%;
+      object-fit: cover;
+    }
+
+    .featuredTitles {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      transition: transform 0.3s ease-in, all 0.3s ease-in;
+    }
+  }
+}

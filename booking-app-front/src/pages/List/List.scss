@@ -1,0 +1,128 @@
+@import '../../styles/variables.scss';
+
+.list {
+  .listContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+
+    .listWrapper {
+      width: 100%;
+      max-width: 1200px;
+      display: flex;
+      gap: 20px;
+
+      .listSearch {
+        max-width: 400px;
+        width: max-content;
+        background-color: $primary-yellow;
+        padding: 10px;
+        border-radius: 10px;
+        position: sticky;
+        top: 10px;
+        height: max-content;
+
+        &Title {
+          font-size: 24px;
+          font-weight: 600;
+          color: $primary-grey;
+          margin-bottom: 5px;
+        }
+        & > hr {
+          margin-bottom: 15px;
+        }
+      }
+
+      .listItem {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        margin-bottom: 10px;
+
+        & > label {
+          font-size: 16px;
+          color: $primary-grey;
+          margin-bottom: 5px;
+        }
+
+        & > input {
+          height: 33px;
+          font-size: 16px;
+          color: $primary-grey;
+          border: none;
+          outline: 1px solid #ccc;
+          border-radius: 5px;
+          padding: 5px;
+        }
+        & > span {
+          height: 33px;
+          font-size: 16px;
+          color: $primary-grey;
+          padding: 8px 5px 6px 5px;
+          border-radius: 5px;
+          background-color: white;
+          cursor: pointer;
+        }
+        & > hr {
+          width: 80%;
+          padding: 0 20px;
+        }
+      }
+
+      .listOptionItem {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 12px;
+        margin-top: 5px;
+        align-items: center;
+        gap: 10px;
+        color: $primary-grey;
+      }
+
+      .lastItem > label {
+        padding-top: 15px;
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 0;
+      }
+
+      .listOptionInput {
+        width: 50%;
+        height: 33px;
+        font-size: 16px;
+        color: $primary-grey;
+        border: none;
+        outline: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 5px;
+      }
+
+      .listOptionText {
+        font-size: 16px;
+        color: $primary-grey;
+      }
+      .searchBtn {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 15px;
+        outline: 0.15rem solid white;
+        background-color: $light-blue;
+        color: white;
+        font-size: 18px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.15s ease-in-out;
+
+        &:hover {
+          background-color: $primary-blue;
+          transition: all 0.15s ease-in-out;
+        }
+      }
+
+      .listResult {
+        flex: 3;
+      }
+    }
+  }
+}

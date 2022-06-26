@@ -1,0 +1,190 @@
+				 REACT BOOKING APP - HOTEL RESERVATION APP
+
+Frontend: https://www.youtube.com/watch?v=RkWpJ4XUHuw&t=3s
+Backend: https://www.youtube.com/watch?v=k3Vfj-e1Ma4&t=6s
+Repo: https://github.com/safak/youtube2022/tree/mern-booking
+
+Fijate que Vite ya viene configurado para soportar sass(aunque hay que instalar la libreria con npm i sass).Igual que Next.
+
+TIP: fijate como la mejor opción para configurar 3 incrementos fue un único setter con dos argumentos.Realmente una brillante idea:
+        <button
+                    className='optionCounterButton'
+                    onClick={() => handleOption('adult', 'd')}
+                  >
+                    -
+                  </button>
+                  <span className='optionCounterNumber'>1</span>
+                  <button
+                    className='optionCounterButton'
+                    onClick={() => handleOption('adult', 'i')}
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+              <div className='optionItem'>
+                <span className='optionText'>Children</span>
+                <div className='optionCounter'>
+                  <button
+                    className='optionCounterButton'
+                    onClick={() => handleOption('children', 'd')}
+                  >
+                    -
+                  </button>
+                  <span className='optionCounterNumber'>0</span>
+                  <button className='optionCounterButton'
+                    onClick={() => handleOption('children', 'i')} 
+                  >+</button>
+                </div>
+              </div>
+              <div className='optionItem'>
+                <span className='optionText'>Room</span>
+                <div className='optionCounter'>
+                  <button className='optionCounterButton'
+                    onClick={() => handleOption('room', 'd')}
+                  >-</button>
+                  <span className='optionCounterNumber'>1</span>
+                  <button className='optionCounterButton'
+                    onClick={() => handleOption('room', 'i')}
+                  >+</button>
+
+Y de nuevo fijate en el uso de esta propiedad computada(debo hacer alguna práctica más):
+  const handleOption = (option: "adult" | "children" | "room",op:string) => {
+    setOptions( prev => {
+      return {
+        ...prev,
+        /* va a girar sobre la puta opción(me dió igual que fuera una enum) */
+         [option]: op === 'add' ? prev[option] + 1 : prev[option] - 1
+      }
+    })
+  }
+
+NOTA: ES6 me permite usar una expresión entre corchetes[].Despues usará el resultado de esa expresión como el nombre/key de la propiedad de un objeto(propiedades calculadas o computadas)
+
+TIP: recuerda que tengo que instalar Sass en un proyecto vite y nada más(y en uno Next??)
+
+Poner el onChange por si sólo no implica pasar de un componente no controlado a controlado,es con onChange + name cuando es necesario un value.Sea como sea nada me impide usar los tres para salir de dudas,aunque fijate que Lama usó sólo un onChange sin el name para que no le salte el warning y asi no tenga que poner el value también
+
+TIP: fijate como pasamos por la ruta los estados que rescato del date-picker de la selección de personas-hijos-habitaciones y del input con navigate.
+
+  const handleSearch = (event: MouseEvent<HTMLButtonElement>) => {
+    navigate('/hotels', {
+      state: {
+        destination,
+        date,
+        options
+      }
+    })
+  } <- muy asinto él -_-
+
+Para rescatarlo desde la ruta a la que lo mandamos uso el hook useLocation:
+ const location = useLocation();
+
+state:
+  date: [{…}] <- fijate que viene un arreglo de un objeto con las props startDate y endDate luego tendré en location.state.date[0].startDate la data
+  destination: "malaga"
+  options: {adult: 2, children: 1, room: 2}
+
+				INTERNACIONALIZAR UNA APP DE REACT CON I18NEXT
+
+Lo primero es instalar dos paquetes, el core y el adapter para React(son i18next y react-i18next).Fijate que en Angular o Vue será el core + el propio del frame,seguramente:
+>npm i i18next react-i18next
+
+Despues lo mejor es seguir la documentación.Hay que crear el archivo i18next.js en la raiz del project e importarlo en el index.tsx.Luego es tan sencillo como usar su hook useTranslation(path).Al parecer este path ha ido cambiando y ahora hay que meter los archivos en public/locales/en/global.json y similar:
+
+const { t, i18next } = useTranslation(global) <- fijate que los files se deben de llamar todos global.json,algo que no es importante ya que la carpeta los hace únicos.Investigar sobre otras ubicaciones posibles y otros nombres de archivos.
+
+ const { i18n,t } = useTranslation(); <- t es una función e i18n es para crear botones que cambien el lng
+TIP: para cambiar el idioma con la app arrancada no puede ser más fácil gracias al mismo hook:
+ const { i18n } = useTranslation()
+ <button className='' onClick={() => i18n.changeLanguage('es')} > ES </button>
+ <button className='' onClick={() => i18n.changeLanguage('en')}>EN</button>
+NOTA: esto sería para Vite o CRA,NExt tiene otra forma desde la v10 que aprnderé en el otro curso ya que soy muy asinto.
+
+Fijate en el script tan interesante para asintos linuxeros(y para Windows??)
+Ojo,modo reemplazar es con mayúsculas y R( con la R mayuscula),no confundir con Redo que es Ctrl+r 
+
+Recuerda que centro con zz,que el modo reemplazar es Mayus + R(redo es con ctrol) y que busco hacia alante con * y hacia atras con #.Despues me muevo con n o con N.Hacer poco a poco el curso de Udemy.
+
+					BACKEND PART
+
+Instalo ts y ts-node-dev aparte de express,dotenv y mongoose.Creo la conexión,rutas,etc...Fijate que tengo un back de midudev con node y eslint.
+
+Bien,empezamos con el schema de un Hotel.Realmente con una interfaz ha sido suficiente,pero puedo complicarme mucho más,recuerda:
+
+import mongoose from 'mongoose'
+const { Schema, model } = mongoose
+
+interface Hotel {
+  name: string
+  type: string // "hotel" or "apartment" or "motel" or whatever
+  city: string
+  address: string
+  distance: string
+  photos?: string[]
+  desc: string
+  rating?: number
+  rooms?: string[]
+  cheapestPrice: number
+  featured?: boolean
+}
+
+const HotelSchema = new Schema<Hotel>(
+  {
+    name: { type: String, required: true },
+    type: { type: String, required: true },
+    city: { type: String, required: true },
+    address: { type: String, required: true },
+    distance: { type: String, required: true },
+    photos: { type: [String] },
+    desc: { type: String, required: true },
+    rating: { type: Number, min: 0, max: 5 },
+    rooms: { type: [String], min: 0, max: 5 },
+    cheapestPrice: { type: Number, required: true },
+    featured: { type: Boolean, default: false }
+  },
+  { timestamps: true, versionKey: false }
+)
+
+export const HotelModel = model<Hotel>('Hotel', HotelSchema)
+
+De momento creó de forma muy rudimentaria los 5 controladores para el CRUD.
+
+Fijate como he necesitado declarar una nueva propiedad a la interface Error con declar global:
+
+declare global {
+  interface Error {
+    status?: number
+  }
+}
+
+export const createError = (status: number, message: string): Error => {
+  const error = new Error()
+  error.status = status
+  error.message = message
+  return error
+}
+
+El Schema de un User va la lucir asi(fijate que con una simple interface me valió,aunque tengo ejemplos mejores en el proyecto de Microservices en TS.
+
+import mongoose from 'mongoose'
+const { Schema, model } = mongoose
+
+interface User {
+  username: string
+  email: string
+  password: string
+  isAdmin?: boolean
+}
+
+const UserSchema = new Schema<User>(
+  {
+    username: { type: String, required: true, unique: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    isAdmin: { type: Boolean, default: false }
+  },
+  { timestamps: true, versionKey: false }
+)
+
+export const UserModel = model<User>('User', UserSchema)
