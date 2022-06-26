@@ -188,3 +188,7 @@ const UserSchema = new Schema<User>(
 )
 
 export const UserModel = model<User>('User', UserSchema)
+
+Sigo por el register + login.Encripto la pass con bcryptjs y mando el token si es un login exitoso(username a unique + la pass correcta).Fijate que mandamos el token en una cookie(instalar bcryptjs + jsonwebtoken + cookie-parser + sus types).
+Bastante sencillo hasta aqui.
+1h
