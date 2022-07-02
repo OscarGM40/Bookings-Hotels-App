@@ -191,4 +191,93 @@ export const UserModel = model<User>('User', UserSchema)
 
 Sigo por el register + login.Encripto la pass con bcryptjs y mando el token si es un login exitoso(username a unique + la pass correcta).Fijate que mandamos el token en una cookie(instalar bcryptjs + jsonwebtoken + cookie-parser + sus types).
 Bastante sencillo hasta aqui.
-1h
+
+Fijate como para mandar el token en la cookie simplemente uso el método cookie antes de status:
+res.cookie("access_token",data).status(200).json(user) <- muy PRO
+
+NOTA: para aumentar los types puedo crearme el folder types/{library}/index.d.ts y pasarselo al tsconfig en la propiedad compilerOptions:
+
+ "compilerOptions": {
+    "typeRoots": ["./types"],
+
+Y dentro de ese file aumento los types para esa libreria
+
+				MIDDLEWARES FOR ROLE AND TOKEN CHECKING
+
+Para comprobar si viene un token en la cookie,y si viene meterlo en la propiedad req.user tuve que crear el types/express/index.d.ts y además pasarlo al tsconfig.
+El middleware no tiene mucho y puedo venir a consultarlo siempre que quiera:
+
+export const verifyToken = (req: Request, res: Response, next: NextFunction) => {
+  const bearerHeader = req.cookies["access_token"];
+
+  if (!bearerHeader) return next(createError(403, "Unauthenticated.Please provide a token"));
+
+  jwt.verify(bearerHeader, process.env.JWT!, (err: VerifyErrors | null, decoded: any) => {
+    if (err) return next(createError(401, "Unauthorized.Please revise the token"));
+    req.user = decoded;
+    next();
+  });
+};
+
+En cuanto a si el user es él mismo(y no otro) o si es admin tengo que abrir el payload:
+
+export const verifyUser = (req: Request, res: Response, next: NextFunction) => {
+  verifyToken(req, res, () => {
+    if (req.user?.id === req.params.id || req.user?.isAdmin) {
+      next();
+    } else {
+      next(createError(403, "Unauthorized.You are not allowed to perform this action"));
+    }
+  });
+};
+
+Estos dos middleware son clave en cualquier aplicación asi que los puedo consultar siempre que quiera.
+Una vez lo tenga basta aplicarlo antes del controller:
+
+router.get("/checkuser/:id", verifyToken, verifyUser, (req, res, next) => {
+  res.status(200).json({
+    user: req.user,
+  });
+});
+
+Y seguramente habrá operaciones que sea necesario que sea un Admin(la anterior es o él mismo o un admin),pero otras operaciones como visitar el panel de admin será solo si soy Admin.
+
+export const verifyAdmin = (req: Request, res: Response, next: NextFunction) => {
+  verifyToken(req,res,() => {
+    if (req.user?.isAdmin) {
+      next();
+    } else {
+      next(createError(401, "Unauthorized.You are not admin"));
+    }
+  })
+}
+Recuerda pasar recursivamente las request yresponses y la cb.Y dado que los verifies están llamando al primero puedo hacer esto:
+//UPDATE
+router.put("/:id",verifyUser, updateUser);
+
+//DELETE
+router.delete("/:id",verifyUser, deleteUser);
+
+//GET
+router.get("/find/:id",verifyUser, getUser);
+
+//GET ALL
+router.get("/",verifyAdmin, getUsers);
+
+Para los productos(hoteles en este caso,todos los pueden ver y solo un admin puede operar con ellos):
+//CREATE
+router.post("/",verifyAdmin, createHotel);
+
+//UPDATE
+router.put("/:id", verifyAdmin, updateHotel);
+
+//DELETE
+router.delete("/:id", verifyAdmin, deleteHotel);
+
+//GET
+router.get("/find/:id", getHotel);
+
+//GET ALL
+router.get("/", getHotels);
+
+1h14

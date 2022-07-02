@@ -28,16 +28,14 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
 
     const isPasswordCorrect = await bcrypt.compare(req.body.password, user.password);
     if (!isPasswordCorrect) return next(createError(400, "Wrong password or username!"));
-
+    // en el payload va {id: user._id, isAdmin: user.isAdmin}
     const token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, process.env.JWT!);
-
-    res
-      .cookie("access_token", token, {
-        httpOnly: true,
+    // fijate como uso res.cookie(name,data).status().json
+    res.cookie("access_token", token, {
+        httpOnly: true, //este boleano agrega una capa de seguridad 
       })
       .status(200)
-      // TODO quitar el token de la respuesta
-      .json({ user, token });
+      .json({ user });
   } catch (err) {
     next(err);
   }
