@@ -300,4 +300,4 @@ export const deleteRoom = async (req: Request, res: Response, next: NextFunction
 
 Ovbiamente vamos a realizar más controladores,pero de momento con los Modelos de User-Room y Hotel y operaciones CRUD básicas es suficiente
 
-
+1h32m Antes de usar el CountByCity
