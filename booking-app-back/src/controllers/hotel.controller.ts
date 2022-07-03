@@ -52,3 +52,5 @@ export const getHotels = async (req: Request, res: Response, next: NextFunction)
     next(err);
   }
 };
+
+

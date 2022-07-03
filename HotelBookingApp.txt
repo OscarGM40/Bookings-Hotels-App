@@ -280,4 +280,24 @@ router.get("/find/:id", getHotel);
 //GET ALL
 router.get("/", getHotels);
 
-1h14
+NOTA: recuerda que cuando tenga colecciones relacionadas puedo usar $push y $pull.Lo necesitaré al borrar una habitación,ya que tengo que sacar el id del array de rooms que tiene como propiedad el modelo de Hotel.Y para crear una lo mismo,al crear la habitación debo saber en que Hotel va.
+
+export const deleteRoom = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    await RoomModel.findByIdAndDelete(req.params.id);
+    try {
+      await HotelModel.findByIdAndUpdate(req.params.hotelId, {
+        $pull: { rooms: req.params.id },
+      });
+    } catch (error) {
+      next(error);
+    }
+    res.status(200).json("Room has been deleted.");
+  } catch (err) {
+    next(err);
+  }
+};
+
+Ovbiamente vamos a realizar más controladores,pero de momento con los Modelos de User-Room y Hotel y operaciones CRUD básicas es suficiente
+
+
