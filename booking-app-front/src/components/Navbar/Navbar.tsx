@@ -1,17 +1,34 @@
 import { useTranslation } from 'react-i18next'
+import { NavLink } from 'react-router-dom'
 import './Navbar.scss'
 
 const Navbar = () => {
-  const { i18n } = useTranslation()
+  
+  const { i18n,t } = useTranslation('translation')
+
   return (
     <div className='navbar' data-testid='navbar'>
       <div className='navContainer'>
-        <span className='logo'>CheapyBookingApp</span>
+        <div>
+        <NavLink to='/' style={{ color: 'inherit', textDecoration: 'none' }}>
+          <span className='logo'>CheapyBookingApp</span>
+        </NavLink>
+          <button
+            className='lngButton'
+            onClick={() => i18n.changeLanguage('es')}
+          >
+            ESP
+          </button>
+          <button
+            className='lngButton'
+            onClick={() => i18n.changeLanguage('en')}
+          >
+            ENG
+          </button>
+        </div>
         <div className='navItems'>
-          <button className='navButton'>Register</button>
-          <button className='navButton'>Login</button>
-          <button className='lngButton' onClick={() => i18n.changeLanguage('es')} >ESP </button>
-          <button className='lngButton' onClick={() => i18n.changeLanguage('en')}>ENG</button>
+          <button className='navButton'>{t('navbarPageRegister')}</button>
+          <button className='navButton'>{t('navbarPageLogin')}</button>
         </div>
       </div>
     </div>

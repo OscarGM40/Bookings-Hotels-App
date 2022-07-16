@@ -300,4 +300,60 @@ export const deleteRoom = async (req: Request, res: Response, next: NextFunction
 
 Ovbiamente vamos a realizar más controladores,pero de momento con los Modelos de User-Room y Hotel y operaciones CRUD básicas es suficiente
 
-1h32m Antes de usar el CountByCity
+IMPORTANTE: fijate que el endpoint para el controller countByCity es asi(/api/hotels/countByCity?cities=berlin,barcelona,madrid).
+Esto es algo nuevo hasta ahora,casi siempre he pasado un único valor por queryString.
+Lo primero sería rescatar el array de strings spliteando por la coma:
+const cities:string[] = (req.query?.cities as string).split(',')
+
+Y recuerda que es sólo contar:
+const list = await Promise.all(cities.map(city => {
+  return HotelModel.countDocuments({city:city});
+return res.status(200).json(list)
+
+Fijate que en una empresa seguramente pidan cosas asi.
+
+				CREATING CUSTOM HOOK FOR REQUESTING DATA 1H32
+
+Realmente es bastante sencillo crear este customHook aunque podria estar mejor hecho.
+
+import { useEffect, useState } from 'react'
+import axios from 'axios'
+
+const useFetch = (url: string) => {
+  const [data, setData] = useState<Array<any>>([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(false)
+  useEffect(() => {
+    const fetchData = async () => {
+      setError(false)
+      setLoading(true)
+      try {
+        const response = await axios.get(url)
+        setData(response.data)
+        setLoading(false)
+      } catch (error: any) {
+        setLoading(false)
+        setError(true)
+      }
+    }
+    fetchData()
+  }, [url])
+
+  const reFetch = async () => {
+    setError(false)
+    setLoading(true)
+    try {
+      const response = await axios.get(url)
+      setData(response.data)
+      setLoading(false)
+    } catch (error: any) {
+      setLoading(false)
+      setError(true)
+    }
+  }
+
+  return {data,loading,error,reFetch}
+}
+
+export default useFetch;
+1h51

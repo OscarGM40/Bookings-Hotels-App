@@ -1,7 +1,7 @@
-import { NextFunction, Request, Response } from 'express';
-import { HotelModel } from '../models/Hotel';
+import { NextFunction, Request, Response } from "express";
+import { HotelModel } from "../models/Hotel";
 
-export const createHotel = async (req:Request, res:Response, next:NextFunction) => {
+export const createHotel = async (req: Request, res: Response, next: NextFunction) => {
   const newHotel = new HotelModel(req.body);
 
   try {
@@ -44,9 +44,16 @@ export const getHotel = async (req: Request, res: Response, next: NextFunction) 
 };
 
 export const getHotels = async (req: Request, res: Response, next: NextFunction) => {
-  const { min, max, ...others } = req.query;
+  const { limit} = req.query;
+  const { min,max, ...others} = req.query;
   try {
-    const hotels = await HotelModel.find();
+    const hotels = await HotelModel.find(
+      {...others,
+       cheapestPrice: {$gt: min || 1 ,$lt:max || 99999}
+      })
+    .limit(+limit!)
+    .select("-updatedAt")
+    .lean();
     res.status(200).json(hotels);
   } catch (err) {
     next(err);
@@ -54,13 +61,35 @@ export const getHotels = async (req: Request, res: Response, next: NextFunction)
 };
 
 export const countByCity = async (req: Request, res: Response, next: NextFunction) => {
-  const cities = (req.query?.cities as string).split(',');
+  const cities = (req.query?.cities as string).split(",");
   try {
-    const list = await Promise.all(cities.map(city => {
-      return HotelModel.countDocuments({ city:city });
-    }))
+    const list = await Promise.all(
+      cities.map((city) => {
+        return HotelModel.countDocuments({ city: city });
+      }),
+    );
     res.status(200).json(list);
   } catch (err) {
     next(err);
   }
-}
+};
+
+export const countByType = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+  const hotelCount = await HotelModel.countDocuments({ type: "hotel" });
+  const apartmentCount = await HotelModel.countDocuments({ type: "apartment" });
+  const resortCount = await HotelModel.countDocuments({ type: "resort" });
+  const villaCount = await HotelModel.countDocuments({ type: "villa" });
+  const cabinCount = await HotelModel.countDocuments({ type: "cabin" });
+
+  res.status(200).json( [
+    { type:"hotel",count: hotelCount},
+    { type:"apartment",count:apartmentCount},
+    { type:"resort",count: resortCount},
+    { type:"villa",count: villaCount},
+    { type:"cabin",count: cabinCount}
+  ]);
+  } catch (err) {
+    next(err);
+  }
+};

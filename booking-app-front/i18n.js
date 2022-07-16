@@ -20,7 +20,7 @@ i18n
   .init({
     lng: 'en', // con lng le hardcodeo el lenguaje(pisará incluso al autodetectado)
     fallbackLng: 'es',
-    debug: true,
+    // debug: true,
 
     interpolation: {
       escapeValue: false // not needed for react as it escapes by default

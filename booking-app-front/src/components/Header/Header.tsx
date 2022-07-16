@@ -41,7 +41,7 @@ const Header = ({ type }: HeaderProps) => {
     setOptions((prev) => {
       return {
         ...prev,
-        /* va a girar sobre la puta opción(me dió igual que fuera una enum) */
+        /* va a girar sobre la opción(me dió igual que fuera una enum) */
         [option]: op === 'i' ? prev[option] + 1 : prev[option] - 1
       }
     })

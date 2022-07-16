@@ -1,7 +1,8 @@
 import { Router } from "express";
-import { verifyAdmin } from '../utils/verifyToken';
+import { verifyAdmin } from "../utils/verifyToken";
 import {
   countByCity,
+  countByType,
   createHotel,
   deleteHotel,
   getHotel,
@@ -12,7 +13,7 @@ import {
 const router = Router();
 
 //CREATE
-router.post("/",verifyAdmin, createHotel);
+router.post("/", verifyAdmin, createHotel);
 
 //UPDATE
 router.put("/:id", verifyAdmin, updateHotel);
@@ -26,8 +27,8 @@ router.get("/find/:id", getHotel);
 //GET ALL
 router.get("/", getHotels);
 
+router.get("/countByCity", countByCity);
 
-router.get("/countByCity",countByCity);
+router.get("/countByType", countByType);
 
-// router(.get("/countByType",countByType))
 export const HotelsRouter = router;
