@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 
 const useFetch = (url: string) => {
-  const [data, setData] = useState<Array<any>>([])
+  const [data, setData] = useState<Array<any> | any>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
   
@@ -23,6 +23,7 @@ const useFetch = (url: string) => {
   }, [url])
 
   const reFetch = async () => {
+    await new Promise(resolve => setTimeout(resolve,200))
     setError(false)
     setLoading(true)
     try {

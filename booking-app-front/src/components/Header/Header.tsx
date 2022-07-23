@@ -8,11 +8,12 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { format } from 'date-fns'
-import { MouseEvent, useState } from 'react'
+import { MouseEvent, useContext, useState } from 'react'
 import { DateRange } from 'react-date-range'
 import 'react-date-range/dist/styles.css' // main style file
 import 'react-date-range/dist/theme/default.css' // theme css file
 import { useNavigate } from 'react-router-dom'
+import { SearchContext } from '../../context/SearchContext'
 import './Header.scss'
 
 interface HeaderProps {
@@ -28,7 +29,7 @@ const Header = ({ type }: HeaderProps) => {
     children: 0,
     room: 1
   })
-  const [date, setDate] = useState([
+  const [dates, setDates] = useState([
     {
       startDate: new Date(),
       endDate: new Date(),
@@ -47,9 +48,12 @@ const Header = ({ type }: HeaderProps) => {
     })
   }
 
+  const {dispatch} = useContext(SearchContext)
+  
   const handleSearch = (event: MouseEvent<HTMLButtonElement>) => {
+    dispatch({type:"NEW_SEARCH",payload:{destination,dates,options}})
     // recuerda que desde la v6 es navigate(url,{state:{}})
-    navigate('/hotels', { state: { destination, date, options }
+    navigate('/hotels', { state: { destination, dates, options }
     })
   }
 
@@ -123,16 +127,16 @@ const Header = ({ type }: HeaderProps) => {
                 <span
                   onClick={() => setOpenDate(!openDate)}
                   className='headerSearchText'
-                >{`${format(date[0].startDate, 'MM//dd/yyyy')} to ${format(
-                  date[0].endDate,
+                >{`${format(dates[0].startDate, 'MM//dd/yyyy')} to ${format(
+                  dates[0].endDate,
                   'MM//dd/yyyy'
                 )}`}</span>
                 {openDate && (
                   <DateRange
                     editableDateInputs={true}
-                    onChange={(item) => setDate([item.selection as any])}
+                    onChange={(item) => setDates([item.selection as any])}
                     moveRangeOnFirstSelection={false}
-                    ranges={date}
+                    ranges={dates}
                     className='date-range'
                     color='red'
                     minDate={new Date()}

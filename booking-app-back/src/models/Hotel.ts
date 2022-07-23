@@ -5,6 +5,7 @@ interface Hotel {
   name: string;
   type: string; // "hotel" or "apartment" or "motel" or whatever
   city: string;
+  title?: string;
   address: string;
   distance: string;
   photos?: string[];
@@ -20,6 +21,7 @@ const HotelSchema = new Schema<Hotel>(
     name: { type: String, required: true },
     type: { type: String, required: true },
     city: { type: String, required: true },
+    title: { type: String },
     address: { type: String, required: true },
     distance: { type: String, required: true },
     photos: { type: [String] },

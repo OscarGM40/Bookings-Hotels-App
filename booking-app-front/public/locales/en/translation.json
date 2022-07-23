@@ -1,5 +1,7 @@
 {
-  "navbarPageRegister":"Register",
-  "navbarPageLogin":"Login",
+  "navbarPageRegister": "Register",
+  "navbarPageLogin": "Login",
+  "listPageDestination": "Destination",
+  "listPageCheckinDate":"Check-in Date",
   "header": "Search"
 }

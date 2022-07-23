@@ -1,17 +1,19 @@
 import { format } from 'date-fns'
-import { FC, useState } from 'react'
+import { FC, useContext, useState } from 'react'
 import { DateRange } from 'react-date-range'
 import { useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
 import Header from '../../components/Header/Header'
 import Navbar from '../../components/Navbar/Navbar'
 import SearchItem from '../../components/SearchItem/SearchItem'
+import { SearchContext } from '../../context/SearchContext'
+import useFetch from '../../hooks/useFetch'
 import './List.scss'
 
 type LocationProps = {
   state: {
     destination: string
-    date: any
+    dates: any
     options: {
       adult: number
       children: number
@@ -23,12 +25,24 @@ type LocationProps = {
 interface ListProps {}
 
 const List: FC<ListProps> = () => {
-  const { t } = useTranslation('global')
+  const { t } = useTranslation('translation')
   const location = useLocation() as LocationProps // type assertion
-  const [destination, setDestination] = useState(location.state.destination)
-  const [date, setDate] = useState(location.state.date)
+  const [destination] = useState(location.state.destination)
+  const [, setDate] = useState(location.state.dates[0])
   const [openDate, setOpenDate] = useState(false)
-  const [options, setOptions] = useState(location.state.options)
+  const [options] = useState(location.state.options)
+  const [min, setMin] = useState<number | null | undefined>(0)
+  const [max, setMax] = useState<number | null | undefined>(9999)
+
+  const { dates } = useContext(SearchContext)
+
+  const { data, loading, reFetch } = useFetch(
+    `http://localhost:8000/api/hotels?city=${destination}&min=${min}&max=${max}`
+  )
+
+  const handleClick = () => {
+    reFetch()
+  }
 
   return (
     <div className='list'>
@@ -40,19 +54,19 @@ const List: FC<ListProps> = () => {
             <h1 className='listSearchTitle'>{t('header')}</h1>
             <hr />
             <div className='listItem'>
-              <label>Destination</label>
+              <label>{t('listPageDestination')}</label>
               <input type='text' placeholder={destination} />
             </div>
             <div className='listItem'>
-              <label>Check-in Date</label>
-              <span className="listCheck" onClick={() => setOpenDate(!openDate)}>{`${format(
-                date[0].startDate,
-                'MM/dd/yyyy'
-              )}`}</span>
+              <label>{t('listPageCheckinDate')}</label>
+              <span
+                className='listCheck'
+                onClick={() => setOpenDate(!openDate)}
+              >{`${format(dates[0].startDate, 'MM/dd/yyyy')}`}</span>
               {openDate && (
                 <DateRange
                   onChange={(item) => setDate([item.selection as any])}
-                  ranges={date}
+                  ranges={dates}
                   minDate={new Date()}
                 />
               )}
@@ -66,14 +80,22 @@ const List: FC<ListProps> = () => {
                   <span className='listOptionText'>
                     Min price <small>(per night)</small>
                   </span>
-                  <input type='number' className='listOptionInput' />
+                  <input
+                    type='number'
+                    onChange={(e) => setMin(+e.target.value)}
+                    className='listOptionInput'
+                  />
                 </div>
 
                 <div className='listOptionItem'>
                   <span className='listOptionText'>
                     Max price <small>(per night)</small>
                   </span>
-                  <input type='number' className='listOptionInput' />
+                  <input
+                    type='number'
+                    onChange={(e) => setMax(+e.target.value)}
+                    className='listOptionInput'
+                  />
                 </div>
 
                 <div className='listOptionItem'>
@@ -108,18 +130,20 @@ const List: FC<ListProps> = () => {
               </div>
             </div>
 
-            <button className='searchBtn'>Search</button>
+            <button className='searchBtn' onClick={handleClick}>
+              Search
+            </button>
           </div>
           <div className='listResult'>
-            <SearchItem />
-            <SearchItem />
-            <SearchItem />
-            <SearchItem />
-            <SearchItem />
-            <SearchItem />
-            <SearchItem />
-            <SearchItem />
-            <SearchItem />
+            {loading ? (
+              'loading'
+            ) : (
+              <>
+                {data.map((item: any) => (
+                  <SearchItem key={item._id} item={item} />
+                ))}
+              </>
+            )}
           </div>
         </div>
       </div>

@@ -1,5 +1,7 @@
 {
   "navbarPageRegister": "Registrarse",
   "navbarPageLogin": "Iniciar Sesión",
+  "listPageDestination":"Destino",
+  "listPageCheckinDate":"Fecha entrada",
   "header": "Buscar"
 }

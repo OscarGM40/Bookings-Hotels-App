@@ -49,7 +49,7 @@ export const getHotels = async (req: Request, res: Response, next: NextFunction)
   try {
     const hotels = await HotelModel.find(
       {...others,
-       cheapestPrice: {$gt: min || 1 ,$lt:max || 99999}
+       cheapestPrice: {$gte: min || 1 ,$lte:max || 99999}
       })
     .limit(+limit!)
     .select("-updatedAt")
