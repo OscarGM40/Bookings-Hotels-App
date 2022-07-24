@@ -1,0 +1,39 @@
+@import '../../styles/variables.scss';
+
+.login {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+      rgba(255,255,255,0.8),
+      rgba(255,255,255,0.5)
+   ), url("https://cdn.pixabay.com/photo/2022/07/13/10/54/mountains-7319059_960_720.jpg") center;
+   background-size: cover;
+}
+
+.lContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lInput{
+  height: 40px;
+  padding: 10px;
+}
+
+.lButton {
+  border: none;
+  padding: 10px 20px;
+  background-color: #0071c2;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.lButton:disabled{
+  background-color: #0071c28c;
+  cursor: not-allowed;
+}

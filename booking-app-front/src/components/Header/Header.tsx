@@ -13,6 +13,7 @@ import { DateRange } from 'react-date-range'
 import 'react-date-range/dist/styles.css' // main style file
 import 'react-date-range/dist/theme/default.css' // theme css file
 import { useNavigate } from 'react-router-dom'
+import { AuthContext } from '../../context/AuthContext'
 import { SearchContext } from '../../context/SearchContext'
 import './Header.scss'
 
@@ -37,6 +38,7 @@ const Header = ({ type }: HeaderProps) => {
     }
   ])
   const navigate = useNavigate()
+  const { user } = useContext(AuthContext)
 
   const handleOption = (option: 'adult' | 'children' | 'room', op: string) => {
     setOptions((prev) => {
@@ -48,13 +50,12 @@ const Header = ({ type }: HeaderProps) => {
     })
   }
 
-  const {dispatch} = useContext(SearchContext)
-  
+  const { dispatch } = useContext(SearchContext)
+
   const handleSearch = (event: MouseEvent<HTMLButtonElement>) => {
-    dispatch({type:"NEW_SEARCH",payload:{destination,dates,options}})
+    dispatch({ type: 'NEW_SEARCH', payload: { destination, dates, options } })
     // recuerda que desde la v6 es navigate(url,{state:{}})
-    navigate('/hotels', { state: { destination, dates, options }
-    })
+    navigate('/hotels', { state: { destination, dates, options } })
   }
 
   return (
@@ -108,7 +109,7 @@ const Header = ({ type }: HeaderProps) => {
               Get rewarded for your travels - unlock instant savings of 10% or
               more with a free CheapyBooking account
             </p>
-            <button className='headerBtn'>Sign in / Register</button>
+            {!user && <button className='headerBtn'>Sign in / Register</button>}
             <div className='headerSearch'>
               <div className='headerSearchItem'>
                 <FontAwesomeIcon icon={faBed} className='headerIcon' />
@@ -116,7 +117,7 @@ const Header = ({ type }: HeaderProps) => {
                   type='text'
                   placeholder='Where are you going?'
                   className='headerSearchInput'
-                  name="destination"
+                  name='destination'
                   value={destination}
                   onChange={(event) => setDestination(event.target.value)}
                 />
